@@ -4760,7 +4760,7 @@ void Editor::ButtonMoveWithModifiers(Point pt, unsigned int, int modifiers) {
 		AllowVirtualSpace(virtualSpaceOptions, sel.IsRectangular()));
 	movePos = MovePositionOutsideChar(movePos, sel.MainCaret() - movePos.Position());
 
-	if (inDragDrop == ddInitial) {
+	/*if (inDragDrop == ddInitial) {
 		if (DragThreshold(ptMouseLast, pt)) {
 			SetMouseCapture(false);
 			FineTickerCancel(tickScroll);
@@ -4769,7 +4769,7 @@ void Editor::ButtonMoveWithModifiers(Point pt, unsigned int, int modifiers) {
 			StartDrag();
 		}
 		return;
-	}
+	}*/
 
 	ptMouseLast = pt;
 	PRectangle rcClient = GetClientRectangle();
