@@ -1,0 +1,8 @@
+version: "1"
+rules:
+  - base: feature
+    upstream: master
+    mergeMethod: merge
+  - base: master
+    upstream: notepad-plus-plus:master
+	mergeMethod: hardreset
