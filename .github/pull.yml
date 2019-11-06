@@ -5,4 +5,4 @@ rules:
     mergeMethod: merge
   - base: master
     upstream: notepad-plus-plus:master
-	mergeMethod: hardreset
+    mergeMethod: hardreset
