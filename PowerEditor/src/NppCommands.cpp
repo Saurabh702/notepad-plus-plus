@@ -462,7 +462,7 @@ void Notepad_plus::command(int id)
 			if (nppGui._searchEngineChoice == nppGui.se_custom)
 			{
 				url = nppGui._searchEngineCustom;
-				remove_if(url.begin(), url.end(), isspace);
+				remove_if(url.begin(), url.end(), _istspace);
 
 				auto httpPos = url.find(TEXT("http://"));
 				auto httpsPos = url.find(TEXT("https://"));
@@ -3497,6 +3497,9 @@ void Notepad_plus::command(int id)
 			case IDM_SEARCH_MARKALLEXT5      :
 			case IDM_SEARCH_UNMARKALLEXT5    :
 			case IDM_SEARCH_CLEARALLMARKS    :
+			case IDM_FORMAT_TODOS  :
+			case IDM_FORMAT_TOUNIX :
+			case IDM_FORMAT_TOMAC  :
 				_macro.push_back(recordedMacroStep(id));
 				break;
 		}
