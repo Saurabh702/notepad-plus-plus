@@ -192,7 +192,7 @@ Notepad_plus::~Notepad_plus()
 LRESULT Notepad_plus::init(HWND hwnd)
 {
 	NppParameters& nppParam = NppParameters::getInstance();
-	NppGUI & nppGUI = const_cast<NppGUI &>(nppParam.getNppGUI());
+	NppGUI & nppGUI = nppParam.getNppGUI();
 
 	// Menu
 	_mainMenuHandle = ::GetMenu(hwnd);
@@ -219,7 +219,7 @@ LRESULT Notepad_plus::init(HWND hwnd)
 	_mainWindowStatus = WindowMainActive;
 	_activeView = MAIN_VIEW;
 
-	const ScintillaViewParams & svp1 = nppParam.getSVP();
+	const ScintillaViewParams & svp = nppParam.getSVP();
 
 	int tabBarStatus = nppGUI._tabStatus;
 
@@ -243,13 +243,13 @@ LRESULT Notepad_plus::init(HWND hwnd)
 	_invisibleEditView.wrap(false); // Make sure no slow down
 
 	// Configuration of 2 scintilla views
-	_mainEditView.showMargin(ScintillaEditView::_SC_MARGE_LINENUMBER, svp1._lineNumberMarginShow);
-	_subEditView.showMargin(ScintillaEditView::_SC_MARGE_LINENUMBER, svp1._lineNumberMarginShow);
-	_mainEditView.showMargin(ScintillaEditView::_SC_MARGE_SYBOLE, svp1._bookMarkMarginShow);
-	_subEditView.showMargin(ScintillaEditView::_SC_MARGE_SYBOLE, svp1._bookMarkMarginShow);
+	_mainEditView.showMargin(ScintillaEditView::_SC_MARGE_LINENUMBER, svp._lineNumberMarginShow);
+	_subEditView.showMargin(ScintillaEditView::_SC_MARGE_LINENUMBER, svp._lineNumberMarginShow);
+	_mainEditView.showMargin(ScintillaEditView::_SC_MARGE_SYBOLE, svp._bookMarkMarginShow);
+	_subEditView.showMargin(ScintillaEditView::_SC_MARGE_SYBOLE, svp._bookMarkMarginShow);
 
-	_mainEditView.showIndentGuideLine(svp1._indentGuideLineShow);
-	_subEditView.showIndentGuideLine(svp1._indentGuideLineShow);
+	_mainEditView.showIndentGuideLine(svp._indentGuideLineShow);
+	_subEditView.showIndentGuideLine(svp._indentGuideLineShow);
 
 	::SendMessage(hwnd, NPPM_INTERNAL_SETCARETWIDTH, 0, 0);
 	::SendMessage(hwnd, NPPM_INTERNAL_SETCARETBLINKRATE, 0, 0);
@@ -259,53 +259,53 @@ LRESULT Notepad_plus::init(HWND hwnd)
 	_pluginsAdminDlg.init(_pPublicInterface->getHinst(), hwnd);
 
 	//Marker Margin config
-	_mainEditView.setMakerStyle(svp1._folderStyle);
-	_subEditView.setMakerStyle(svp1._folderStyle);
+	_mainEditView.setMakerStyle(svp._folderStyle);
+	_subEditView.setMakerStyle(svp._folderStyle);
 	_mainEditView.defineDocType(_mainEditView.getCurrentBuffer()->getLangType());
 	_subEditView.defineDocType(_subEditView.getCurrentBuffer()->getLangType());
 
 	//Line wrap method
-	_mainEditView.setWrapMode(svp1._lineWrapMethod);
-	_subEditView.setWrapMode(svp1._lineWrapMethod);
+	_mainEditView.setWrapMode(svp._lineWrapMethod);
+	_subEditView.setWrapMode(svp._lineWrapMethod);
 
-	_mainEditView.execute(SCI_SETCARETLINEVISIBLE, svp1._currentLineHilitingShow);
-	_subEditView.execute(SCI_SETCARETLINEVISIBLE, svp1._currentLineHilitingShow);
+	_mainEditView.execute(SCI_SETCARETLINEVISIBLE, svp._currentLineHilitingShow);
+	_subEditView.execute(SCI_SETCARETLINEVISIBLE, svp._currentLineHilitingShow);
 
-	_mainEditView.execute(SCI_SETENDATLASTLINE, !svp1._scrollBeyondLastLine);
-	_subEditView.execute(SCI_SETENDATLASTLINE, !svp1._scrollBeyondLastLine);
+	_mainEditView.execute(SCI_SETENDATLASTLINE, !svp._scrollBeyondLastLine);
+	_subEditView.execute(SCI_SETENDATLASTLINE, !svp._scrollBeyondLastLine);
 
-	if (svp1._doSmoothFont)
+	if (svp._doSmoothFont)
 	{
 		_mainEditView.execute(SCI_SETFONTQUALITY, SC_EFF_QUALITY_LCD_OPTIMIZED);
 		_subEditView.execute(SCI_SETFONTQUALITY, SC_EFF_QUALITY_LCD_OPTIMIZED);
 	}
 
-	_mainEditView.setBorderEdge(svp1._showBorderEdge);
-	_subEditView.setBorderEdge(svp1._showBorderEdge);
+	_mainEditView.setBorderEdge(svp._showBorderEdge);
+	_subEditView.setBorderEdge(svp._showBorderEdge);
 
 	_mainEditView.execute(SCI_SETCARETLINEVISIBLEALWAYS, true);
 	_subEditView.execute(SCI_SETCARETLINEVISIBLEALWAYS, true);
 
-	_mainEditView.wrap(svp1._doWrap);
-	_subEditView.wrap(svp1._doWrap);
+	_mainEditView.wrap(svp._doWrap);
+	_subEditView.wrap(svp._doWrap);
 
 	::SendMessage(hwnd, NPPM_INTERNAL_EDGEMULTISETSIZE, 0, 0);
 
-	_mainEditView.showEOL(svp1._eolShow);
-	_subEditView.showEOL(svp1._eolShow);
+	_mainEditView.showEOL(svp._eolShow);
+	_subEditView.showEOL(svp._eolShow);
 
-	_mainEditView.showWSAndTab(svp1._whiteSpaceShow);
-	_subEditView.showWSAndTab(svp1._whiteSpaceShow);
+	_mainEditView.showWSAndTab(svp._whiteSpaceShow);
+	_subEditView.showWSAndTab(svp._whiteSpaceShow);
 
-	_mainEditView.showWrapSymbol(svp1._wrapSymbolShow);
-	_subEditView.showWrapSymbol(svp1._wrapSymbolShow);
+	_mainEditView.showWrapSymbol(svp._wrapSymbolShow);
+	_subEditView.showWrapSymbol(svp._wrapSymbolShow);
 
 	_mainEditView.performGlobalStyles();
 	_subEditView.performGlobalStyles();
 
 	_zoomOriginalValue = static_cast<int32_t>(_pEditView->execute(SCI_GETZOOM));
-	_mainEditView.execute(SCI_SETZOOM, svp1._zoom);
-	_subEditView.execute(SCI_SETZOOM, svp1._zoom2);
+	_mainEditView.execute(SCI_SETZOOM, svp._zoom);
+	_subEditView.execute(SCI_SETZOOM, svp._zoom2);
 
 	::SendMessage(hwnd, NPPM_INTERNAL_SETMULTISELCTION, 0, 0);
 
@@ -328,6 +328,12 @@ LRESULT Notepad_plus::init(HWND hwnd)
 	// Let Scintilla deal with some of the folding functionality
 	_mainEditView.execute(SCI_SETAUTOMATICFOLD, SC_AUTOMATICFOLD_SHOW);
 	_subEditView.execute(SCI_SETAUTOMATICFOLD, SC_AUTOMATICFOLD_SHOW);
+
+	// Set padding info
+	_mainEditView.execute(SCI_SETMARGINLEFT, 0, svp._paddingLeft);
+	_mainEditView.execute(SCI_SETMARGINRIGHT, 0, svp._paddingRight);
+	_subEditView.execute(SCI_SETMARGINLEFT, 0, svp._paddingLeft);
+	_subEditView.execute(SCI_SETMARGINRIGHT, 0, svp._paddingRight);
 
 	TabBarPlus::doDragNDrop(true);
 
@@ -744,7 +750,7 @@ void Notepad_plus::killAllChildren()
 
 bool Notepad_plus::saveGUIParams()
 {
-	NppGUI & nppGUI = const_cast<NppGUI &>((NppParameters::getInstance()).getNppGUI());
+	NppGUI & nppGUI = (NppParameters::getInstance()).getNppGUI();
 	nppGUI._toolbarShow = _rebarTop.getIDVisible(REBAR_BAR_TOOLBAR);
 	nppGUI._toolBarStatus = _toolBar.getState();
 
@@ -824,7 +830,7 @@ bool Notepad_plus::saveFileBrowserParam()
 
 void Notepad_plus::saveDockingParams()
 {
-	NppGUI & nppGUI = const_cast<NppGUI &>((NppParameters::getInstance()).getNppGUI());
+	NppGUI & nppGUI = (NppParameters::getInstance()).getNppGUI();
 
 	// Save the docking information
 	nppGUI._dockingData._leftWidth		= _dockingManager.getDockedContSize(CONT_LEFT);
@@ -991,7 +997,7 @@ int Notepad_plus::getHtmlXmlEncoding(const TCHAR *fileName) const
 		_invisibleEditView.execute(SCI_SETTARGETRANGE, startPos, endPos);
 
 		auto posFound = _invisibleEditView.execute(SCI_SEARCHINTARGET, strlen(xmlHeaderRegExpr), reinterpret_cast<LPARAM>(xmlHeaderRegExpr));
-		if (posFound != -1 && posFound != -2)
+		if (posFound >= 0)
 		{
             const char *encodingBlockRegExpr = "encoding[ \\t]*=[ \\t]*\"[^\".]+\"";
 			_invisibleEditView.execute(SCI_SEARCHINTARGET, strlen(encodingBlockRegExpr), reinterpret_cast<LPARAM>(encodingBlockRegExpr));
@@ -1035,10 +1041,10 @@ int Notepad_plus::getHtmlXmlEncoding(const TCHAR *fileName) const
 
 		int posFound = static_cast<int32_t>(_invisibleEditView.execute(SCI_SEARCHINTARGET, strlen(htmlHeaderRegExpr), reinterpret_cast<LPARAM>(htmlHeaderRegExpr)));
 
-		if (posFound == -1 || posFound == -2)
+		if (posFound < 0)
 		{
 			posFound = static_cast<int32_t>(_invisibleEditView.execute(SCI_SEARCHINTARGET, strlen(htmlHeaderRegExpr2), reinterpret_cast<LPARAM>(htmlHeaderRegExpr2)));
-			if (posFound == -1 || posFound == -2)
+			if (posFound < 0)
 				return -1;
 		}
 		_invisibleEditView.execute(SCI_SEARCHINTARGET, strlen(charsetBlock), reinterpret_cast<LPARAM>(charsetBlock));
@@ -1513,42 +1519,79 @@ void Notepad_plus::getMatchedFileNames(const TCHAR *dir, const vector<generic_st
 	::FindClose(hFile);
 }
 
-std::mutex replaceInFiles_mutex;
-
-bool Notepad_plus::replaceInFiles()
+bool Notepad_plus::createFilelistForFiles(vector<generic_string> & fileNames)
 {
-	std::lock_guard<std::mutex> lock(replaceInFiles_mutex);
-
 	const TCHAR *dir2Search = _findReplaceDlg.getDir2Search();
 	if (!dir2Search[0] || !::PathFileExists(dir2Search))
 	{
 		return false;
 	}
 
+	vector<generic_string> patterns2Match;
+	_findReplaceDlg.getAndValidatePatterns(patterns2Match);
+
 	bool isRecursive = _findReplaceDlg.isRecursive();
 	bool isInHiddenDir = _findReplaceDlg.isInHiddenDir();
+	getMatchedFileNames(dir2Search, patterns2Match, fileNames, isRecursive, isInHiddenDir);
+	return true;
+}
+
+bool Notepad_plus::createFilelistForProjects(vector<generic_string> & fileNames)
+{
+	vector<generic_string> patterns2Match;
+	_findReplaceDlg.getAndValidatePatterns(patterns2Match);
+	bool somethingIsSelected = false; // at least one Project Panel is open and checked
+
+	if (_findReplaceDlg.isProjectPanel_1() && _pProjectPanel_1 && !_pProjectPanel_1->isClosed())
+	{
+		_pProjectPanel_1->enumWorkSpaceFiles (NULL, patterns2Match, fileNames);
+		somethingIsSelected = true;
+	}
+	if (_findReplaceDlg.isProjectPanel_2() && _pProjectPanel_2 && !_pProjectPanel_2->isClosed())
+	{
+		_pProjectPanel_2->enumWorkSpaceFiles (NULL, patterns2Match, fileNames);
+		somethingIsSelected = true;
+	}
+	if (_findReplaceDlg.isProjectPanel_3() && _pProjectPanel_3 && !_pProjectPanel_3->isClosed())
+	{
+		_pProjectPanel_3->enumWorkSpaceFiles (NULL, patterns2Match, fileNames);
+		somethingIsSelected = true;
+	}
+	return somethingIsSelected;
+}
+
+std::mutex replaceInFiles_mutex;
+
+bool Notepad_plus::replaceInFiles()
+{
+	std::lock_guard<std::mutex> lock(replaceInFiles_mutex);
+
+	std::vector<generic_string> fileNames;
+	if (!createFilelistForFiles(fileNames))
+		return false;
+
+	return replaceInFilelist(fileNames);
+}
+
+bool Notepad_plus::replaceInProjects()
+{
+	std::lock_guard<std::mutex> lock(replaceInFiles_mutex);
+
+	std::vector<generic_string> fileNames;
+	if (!createFilelistForProjects(fileNames))
+		return false;
+
+	return replaceInFilelist(fileNames);
+}
+
+bool Notepad_plus::replaceInFilelist(std::vector<generic_string> & fileNames)
+{
 	int nbTotal = 0;
 
 	ScintillaEditView *pOldView = _pEditView;
 	_pEditView = &_invisibleEditView;
 	Document oldDoc = _invisibleEditView.execute(SCI_GETDOCPOINTER);
 	Buffer * oldBuf = _invisibleEditView.getCurrentBuffer();	//for manually setting the buffer, so notifications can be handled properly
-
-	vector<generic_string> patterns2Match;
-	_findReplaceDlg.getPatterns(patterns2Match);
-	if (patterns2Match.size() == 0)
-	{
-		_findReplaceDlg.setFindInFilesDirFilter(NULL, TEXT("*.*"));
-		_findReplaceDlg.getPatterns(patterns2Match);
-	}
-	else if (allPatternsAreExclusion(patterns2Match))
-	{
-		patterns2Match.insert(patterns2Match.begin(), TEXT("*.*"));
-	}
-
-	vector<generic_string> fileNames;
-
-	getMatchedFileNames(dir2Search, patterns2Match, fileNames, isRecursive, isInHiddenDir);
 
 	Progress progress(_pPublicInterface->getHinst());
 	size_t filesCount = fileNames.size();
@@ -1706,34 +1749,28 @@ bool Notepad_plus::findInFinderFiles(FindersInfo *findInFolderInfo)
 
 bool Notepad_plus::findInFiles()
 {
-	const TCHAR *dir2Search = _findReplaceDlg.getDir2Search();
-
-	if (!dir2Search[0] || !::PathFileExists(dir2Search))
-	{
+	std::vector<generic_string> fileNames;
+	if (! createFilelistForFiles(fileNames))
 		return false;
-	}
 
-	bool isRecursive = _findReplaceDlg.isRecursive();
-	bool isInHiddenDir = _findReplaceDlg.isInHiddenDir();
+	return findInFilelist(fileNames);
+}
+
+bool Notepad_plus::findInProjects()
+{
+	vector<generic_string> fileNames;
+	if (! createFilelistForProjects(fileNames))
+		return false;
+
+	return findInFilelist(fileNames);
+}
+
+bool Notepad_plus::findInFilelist(std::vector<generic_string> & fileNames)
+{
 	int nbTotal = 0;
 	ScintillaEditView *pOldView = _pEditView;
 	_pEditView = &_invisibleEditView;
 	Document oldDoc = _invisibleEditView.execute(SCI_GETDOCPOINTER);
-
-	vector<generic_string> patterns2Match;
-	_findReplaceDlg.getPatterns(patterns2Match);
-	if (patterns2Match.size() == 0)
-	{
-		_findReplaceDlg.setFindInFilesDirFilter(NULL, TEXT("*.*"));
-		_findReplaceDlg.getPatterns(patterns2Match);
-	}
-	else if (allPatternsAreExclusion(patterns2Match))
-	{
-		patterns2Match.insert(patterns2Match.begin(), TEXT("*.*"));
-	}
-
-	vector<generic_string> fileNames;
-	getMatchedFileNames(dir2Search, patterns2Match, fileNames, isRecursive, isInHiddenDir);
 
 	_findReplaceDlg.beginNewFilesSearch();
 
@@ -1803,8 +1840,8 @@ bool Notepad_plus::findInFiles()
 
 	if (nbTotal != 0)
 	{
-		const NppParameters& nppParam = NppParameters::getInstance();
-		const NppGUI& nppGui = nppParam.getNppGUI();
+		NppParameters& nppParam = NppParameters::getInstance();
+		NppGUI& nppGui = nppParam.getNppGUI();
 		if (!nppGui._findDlgAlwaysVisible)
 		{
 			_findReplaceDlg.display(false);
@@ -1877,8 +1914,8 @@ bool Notepad_plus::findInOpenedFiles()
 
 	if (nbTotal != 0)
 	{
-		const NppParameters& nppParam = NppParameters::getInstance();
-		const NppGUI& nppGui = nppParam.getNppGUI();
+		NppParameters& nppParam = NppParameters::getInstance();
+		NppGUI& nppGui = nppParam.getNppGUI();
 		if (!nppGui._findDlgAlwaysVisible)
 		{
 			_findReplaceDlg.display(false);
@@ -1934,8 +1971,8 @@ bool Notepad_plus::findInCurrentFile(bool isEntireDoc)
 
 	if (nbTotal != 0)
 	{
-		const NppParameters& nppParam = NppParameters::getInstance();
-		const NppGUI& nppGui = nppParam.getNppGUI();
+		NppParameters& nppParam = NppParameters::getInstance();
+		NppGUI& nppGui = nppParam.getNppGUI();
 		if (!nppGui._findDlgAlwaysVisible)
 		{
 			_findReplaceDlg.display(false);
@@ -2174,11 +2211,11 @@ void Notepad_plus::setupColorSampleBitmapsOnMainMenuItems()
 	}
 	bitmapOnStyleMenuItemsInfo[] =
 	{
-		{ IDM_SEARCH_GONEXTMARKER5, SCE_UNIVERSAL_FOUND_STYLE_EXT5, { IDM_SEARCH_MARKALLEXT5, IDM_SEARCH_UNMARKALLEXT5, IDM_SEARCH_GOPREVMARKER5, IDM_SEARCH_STYLE5TOCLIP } },
-		{ IDM_SEARCH_GONEXTMARKER4, SCE_UNIVERSAL_FOUND_STYLE_EXT4, { IDM_SEARCH_MARKALLEXT4, IDM_SEARCH_UNMARKALLEXT4, IDM_SEARCH_GOPREVMARKER4, IDM_SEARCH_STYLE4TOCLIP } },
-		{ IDM_SEARCH_GONEXTMARKER3, SCE_UNIVERSAL_FOUND_STYLE_EXT3, { IDM_SEARCH_MARKALLEXT3, IDM_SEARCH_UNMARKALLEXT3, IDM_SEARCH_GOPREVMARKER3, IDM_SEARCH_STYLE3TOCLIP } },
-		{ IDM_SEARCH_GONEXTMARKER2, SCE_UNIVERSAL_FOUND_STYLE_EXT2, { IDM_SEARCH_MARKALLEXT2, IDM_SEARCH_UNMARKALLEXT2, IDM_SEARCH_GOPREVMARKER2, IDM_SEARCH_STYLE2TOCLIP } },
-		{ IDM_SEARCH_GONEXTMARKER1, SCE_UNIVERSAL_FOUND_STYLE_EXT1, { IDM_SEARCH_MARKALLEXT1, IDM_SEARCH_UNMARKALLEXT1, IDM_SEARCH_GOPREVMARKER1, IDM_SEARCH_STYLE1TOCLIP } },
+		{ IDM_SEARCH_GONEXTMARKER5, SCE_UNIVERSAL_FOUND_STYLE_EXT5, { IDM_SEARCH_MARKALLEXT5, IDM_SEARCH_MARKONEEXT5, IDM_SEARCH_UNMARKALLEXT5, IDM_SEARCH_GOPREVMARKER5, IDM_SEARCH_STYLE5TOCLIP } },
+		{ IDM_SEARCH_GONEXTMARKER4, SCE_UNIVERSAL_FOUND_STYLE_EXT4, { IDM_SEARCH_MARKALLEXT4, IDM_SEARCH_MARKONEEXT4, IDM_SEARCH_UNMARKALLEXT4, IDM_SEARCH_GOPREVMARKER4, IDM_SEARCH_STYLE4TOCLIP } },
+		{ IDM_SEARCH_GONEXTMARKER3, SCE_UNIVERSAL_FOUND_STYLE_EXT3, { IDM_SEARCH_MARKALLEXT3, IDM_SEARCH_MARKONEEXT3, IDM_SEARCH_UNMARKALLEXT3, IDM_SEARCH_GOPREVMARKER3, IDM_SEARCH_STYLE3TOCLIP } },
+		{ IDM_SEARCH_GONEXTMARKER2, SCE_UNIVERSAL_FOUND_STYLE_EXT2, { IDM_SEARCH_MARKALLEXT2, IDM_SEARCH_MARKONEEXT2, IDM_SEARCH_UNMARKALLEXT2, IDM_SEARCH_GOPREVMARKER2, IDM_SEARCH_STYLE2TOCLIP } },
+		{ IDM_SEARCH_GONEXTMARKER1, SCE_UNIVERSAL_FOUND_STYLE_EXT1, { IDM_SEARCH_MARKALLEXT1, IDM_SEARCH_MARKONEEXT1, IDM_SEARCH_UNMARKALLEXT1, IDM_SEARCH_GOPREVMARKER1, IDM_SEARCH_STYLE1TOCLIP } },
 		{ IDM_SEARCH_GONEXTMARKER_DEF, SCE_UNIVERSAL_FOUND_STYLE, { IDM_SEARCH_GOPREVMARKER_DEF, IDM_SEARCH_MARKEDTOCLIP } }
 	};
 
@@ -2549,13 +2586,13 @@ void Notepad_plus::setUniModeText()
 			case uniUTF8:
 				uniModeTextString = TEXT("UTF-8-BOM"); break;
 			case uni16BE:
-				uniModeTextString = TEXT("UCS-2 BE BOM"); break;
+				uniModeTextString = TEXT("UTF-16 BE BOM"); break;
 			case uni16LE:
-				uniModeTextString = TEXT("UCS-2 LE BOM"); break;
+				uniModeTextString = TEXT("UTF-16 LE BOM"); break;
 			case uni16BE_NoBOM:
-				uniModeTextString = TEXT("UCS-2 Big Endian"); break;
+				uniModeTextString = TEXT("UTF-16 Big Endian"); break;
 			case uni16LE_NoBOM:
-				uniModeTextString = TEXT("UCS-2 Little Endian"); break;
+				uniModeTextString = TEXT("UTF-16 Little Endian"); break;
 			case uniCookie:
 				uniModeTextString = TEXT("UTF-8"); break;
 			default :
@@ -2969,7 +3006,7 @@ bool Notepad_plus::isConditionExprLine(int lineNumber)
 	const char ifElseForWhileExpr[] = "((else[ \t]+)?if|for|while)[ \t]*[(].*[)][ \t]*|else[ \t]*";
 
 	auto posFound = _pEditView->execute(SCI_SEARCHINTARGET, strlen(ifElseForWhileExpr), reinterpret_cast<LPARAM>(ifElseForWhileExpr));
-	if (posFound != -1 && posFound != -2)
+	if (posFound >= 0)
 	{
 		auto end = _pEditView->execute(SCI_GETTARGETEND);
 		if (end == endPos)
@@ -3116,7 +3153,7 @@ void Notepad_plus::maintainIndentation(TCHAR ch)
 				const char braceExpr[] = "[ \t]*\\{.*";
 
 				int posFound = static_cast<int32_t>(_pEditView->execute(SCI_SEARCHINTARGET, strlen(braceExpr), reinterpret_cast<LPARAM>(braceExpr)));
-				if (posFound != -1 && posFound != -2)
+				if (posFound >= 0)
 				{
 					int end = int(_pEditView->execute(SCI_GETTARGETEND));
 					if (end == endPos2)
@@ -3376,8 +3413,8 @@ LangType Notepad_plus::menuID2LangType(int cmdID)
             return L_LATEX;
         case IDM_LANG_MMIXAL :
             return L_MMIXAL;
-        case IDM_LANG_NIMROD :
-            return L_NIMROD;
+        case IDM_LANG_NIM :
+            return L_NIM;
         case IDM_LANG_NNCRONTAB :
             return L_NNCRONTAB;
         case IDM_LANG_OSCRIPT :
@@ -3434,6 +3471,13 @@ void Notepad_plus::setTitle()
 
 	if (_isAdministrator)
 		result += TEXT(" [Administrator]");
+
+	generic_string tbAdd = (NppParameters::getInstance()).getTitleBarAdd();
+	if (!tbAdd.empty())
+	{
+		result += TEXT(" - ");
+		result += tbAdd;
+	}
 
 	::SendMessage(_pPublicInterface->getHSelf(), WM_SETTEXT, 0, reinterpret_cast<LPARAM>(result.c_str()));
 }
@@ -4165,8 +4209,18 @@ void Notepad_plus::docOpenInNewInstance(FileTransferMode mode, int x, int y)
 		command += pY;
 	}
 
-	command += TEXT(" -l");
-	command += ScintillaEditView::langNames[buf->getLangType()].lexerName;
+	LangType lt = buf->getLangType();
+
+	// In case of UDL, "-lLANG" argument part is ignored.
+	// We let new instance detect the user lang type via file extension -
+	// it works in the most of case, except if user applies an UDL manually. 
+	// For example,  this workaround won't work under the following situation:
+	// user applies Markdown to a file named "myMarkdown.abc".
+	if (lt != L_USER)
+	{
+		command += TEXT(" -l");
+		command += ScintillaEditView::langNames[lt].lexerName;
+	}
 	command += TEXT(" -n");
 	command += to_wstring(_pEditView->getCurrentLineNumber() + 1);
 	command += TEXT(" -c");
@@ -4432,8 +4486,8 @@ void Notepad_plus::checkUnicodeMenuItems() const
 	switch (um)
 	{
 		case uniUTF8   : id = IDM_FORMAT_UTF_8; break;
-		case uni16BE   : id = IDM_FORMAT_UCS_2BE; break;
-		case uni16LE   : id = IDM_FORMAT_UCS_2LE; break;
+		case uni16BE   : id = IDM_FORMAT_UTF_16BE; break;
+		case uni16LE   : id = IDM_FORMAT_UTF_16LE; break;
 		case uniCookie : id = IDM_FORMAT_AS_UTF_8; break;
 		case uni8Bit   : id = IDM_FORMAT_ANSI; break;
 	}
@@ -5075,7 +5129,7 @@ bool Notepad_plus::goToPreviousIndicator(int indicID2Search, bool isWrap) const
 	// found
 	if (_pEditView->execute(SCI_INDICATORVALUEAT, indicID2Search, posStart))
 	{
-		NppGUI & nppGUI = const_cast<NppGUI &>((NppParameters::getInstance()).getNppGUI());
+		NppGUI & nppGUI = (NppParameters::getInstance()).getNppGUI();
 		nppGUI._disableSmartHiliteTmp = true;
 
         auto currentline = _pEditView->execute(SCI_LINEFROMPOSITION, posEnd);
@@ -5128,7 +5182,7 @@ bool Notepad_plus::goToNextIndicator(int indicID2Search, bool isWrap) const
 	// found
 	if (_pEditView->execute(SCI_INDICATORVALUEAT, indicID2Search, posStart))
 	{
-		NppGUI & nppGUI = const_cast<NppGUI &>((NppParameters::getInstance()).getNppGUI());
+		NppGUI & nppGUI = (NppParameters::getInstance()).getNppGUI();
 		nppGUI._disableSmartHiliteTmp = true;
 
         auto currentline = _pEditView->execute(SCI_LINEFROMPOSITION, posEnd);
@@ -5143,7 +5197,7 @@ bool Notepad_plus::goToNextIndicator(int indicID2Search, bool isWrap) const
 
 void Notepad_plus::fullScreenToggle()
 {
-	if (!_beforeSpecialView.isFullScreen)	//toggle fullscreen on
+	if (!_beforeSpecialView._isFullScreen)	//toggle fullscreen on
 	{
 		_beforeSpecialView._winPlace.length = sizeof(_beforeSpecialView._winPlace);
 		::GetWindowPlacement(_pPublicInterface->getHSelf(), &_beforeSpecialView._winPlace);
@@ -5172,15 +5226,15 @@ void Notepad_plus::fullScreenToggle()
 
 		//Setup GUI
         int bs = buttonStatus_fullscreen;
-		if (_beforeSpecialView.isPostIt)
+		if (_beforeSpecialView._isPostIt)
         {
             bs |= buttonStatus_postit;
         }
         else
 		{
 			//only change the GUI if not already done by postit
-			_beforeSpecialView.isMenuShown = ::SendMessage(_pPublicInterface->getHSelf(), NPPM_ISMENUHIDDEN, 0, 0) != TRUE;
-			if (_beforeSpecialView.isMenuShown)
+			_beforeSpecialView._isMenuShown = ::SendMessage(_pPublicInterface->getHSelf(), NPPM_ISMENUHIDDEN, 0, 0) != TRUE;
+			if (_beforeSpecialView._isMenuShown)
 				::SendMessage(_pPublicInterface->getHSelf(), NPPM_HIDEMENU, 0, TRUE);
 
 			//Hide rebar
@@ -5193,13 +5247,13 @@ void Notepad_plus::fullScreenToggle()
 		::ShowWindow(_pPublicInterface->getHSelf(), SW_HIDE);
 
 		//Set popup style for fullscreen window and store the old style
-		if (!_beforeSpecialView.isPostIt)
+		if (!_beforeSpecialView._isPostIt)
 		{
-			_beforeSpecialView.preStyle = ::SetWindowLongPtr(_pPublicInterface->getHSelf(), GWL_STYLE, WS_POPUP);
-			if (!_beforeSpecialView.preStyle)
+			_beforeSpecialView._preStyle = ::SetWindowLongPtr(_pPublicInterface->getHSelf(), GWL_STYLE, WS_POPUP);
+			if (!_beforeSpecialView._preStyle)
 			{
 				//something went wrong, use default settings
-				_beforeSpecialView.preStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN;
+				_beforeSpecialView._preStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN;
 			}
 		}
 
@@ -5233,10 +5287,10 @@ void Notepad_plus::fullScreenToggle()
         _restoreButton.display(false);
 
 		//Setup GUI
-		if (!_beforeSpecialView.isPostIt)
+		if (!_beforeSpecialView._isPostIt)
 		{
 			//only change the GUI if postit isnt active
-			if (_beforeSpecialView.isMenuShown)
+			if (_beforeSpecialView._isMenuShown)
 				::SendMessage(_pPublicInterface->getHSelf(), NPPM_HIDEMENU, 0, FALSE);
 
 			//Show rebar
@@ -5245,9 +5299,9 @@ void Notepad_plus::fullScreenToggle()
 		}
 
 		//Set old style if not fullscreen
-		if (!_beforeSpecialView.isPostIt)
+		if (!_beforeSpecialView._isPostIt)
 		{
-			::SetWindowLongPtr( _pPublicInterface->getHSelf(), GWL_STYLE, _beforeSpecialView.preStyle);
+			::SetWindowLongPtr( _pPublicInterface->getHSelf(), GWL_STYLE, _beforeSpecialView._preStyle);
 			//Redraw the window and refresh windowmanager cache, dont do anything else, sizing is done later on
 			::SetWindowPos(_pPublicInterface->getHSelf(), HWND_TOP,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_NOZORDER|SWP_DRAWFRAME|SWP_FRAMECHANGED);
 			::ShowWindow(_pPublicInterface->getHSelf(), SW_SHOW);
@@ -5270,9 +5324,9 @@ void Notepad_plus::fullScreenToggle()
 		}
 	}
 	//::SetForegroundWindow(_pPublicInterface->getHSelf());
-	_beforeSpecialView.isFullScreen = !_beforeSpecialView.isFullScreen;
+	_beforeSpecialView._isFullScreen = !_beforeSpecialView._isFullScreen;
 	::SendMessage(_pPublicInterface->getHSelf(), WM_SIZE, 0, 0);
-    if (_beforeSpecialView.isPostIt)
+    if (_beforeSpecialView._isPostIt)
     {
         // show restore button on the right position
         RECT rect;
@@ -5290,33 +5344,32 @@ void Notepad_plus::fullScreenToggle()
 
 void Notepad_plus::postItToggle()
 {
-	NppParameters& nppParam = NppParameters::getInstance();
-	if (!_beforeSpecialView.isPostIt)	// PostIt disabled, enable it
+	if (!_beforeSpecialView._isPostIt)	// PostIt disabled, enable it
 	{
-		NppGUI & nppGUI = const_cast<NppGUI &>(nppParam.getNppGUI());
+		NppGUI & nppGUI = NppParameters::getInstance().getNppGUI();
 		// get current status before switch to postIt
 		//check these always
 		{
-			_beforeSpecialView.isAlwaysOnTop = ::GetMenuState(_mainMenuHandle, IDM_VIEW_ALWAYSONTOP, MF_BYCOMMAND) == MF_CHECKED;
-			_beforeSpecialView.isTabbarShown = ::SendMessage(_pPublicInterface->getHSelf(), NPPM_ISTABBARHIDDEN, 0, 0) != TRUE;
-			_beforeSpecialView.isStatusbarShown = nppGUI._statusBarShow;
+			_beforeSpecialView._isAlwaysOnTop = ::GetMenuState(_mainMenuHandle, IDM_VIEW_ALWAYSONTOP, MF_BYCOMMAND) == MF_CHECKED;
+			_beforeSpecialView._isTabbarShown = ::SendMessage(_pPublicInterface->getHSelf(), NPPM_ISTABBARHIDDEN, 0, 0) != TRUE;
+			_beforeSpecialView._isStatusbarShown = nppGUI._statusBarShow;
 			if (nppGUI._statusBarShow)
 				::SendMessage(_pPublicInterface->getHSelf(), NPPM_HIDESTATUSBAR, 0, TRUE);
-			if (_beforeSpecialView.isTabbarShown)
+			if (_beforeSpecialView._isTabbarShown)
 				::SendMessage(_pPublicInterface->getHSelf(), NPPM_HIDETABBAR, 0, TRUE);
-			if (!_beforeSpecialView.isAlwaysOnTop)
+			if (!_beforeSpecialView._isAlwaysOnTop)
 				::SendMessage(_pPublicInterface->getHSelf(), WM_COMMAND, IDM_VIEW_ALWAYSONTOP, 0);
 		}
 		//Only check these if not fullscreen
         int bs = buttonStatus_postit;
-		if (_beforeSpecialView.isFullScreen)
+		if (_beforeSpecialView._isFullScreen)
         {
             bs |= buttonStatus_fullscreen;
         }
         else
 		{
-			_beforeSpecialView.isMenuShown = ::SendMessage(_pPublicInterface->getHSelf(), NPPM_ISMENUHIDDEN, 0, 0) != TRUE;
-			if (_beforeSpecialView.isMenuShown)
+			_beforeSpecialView._isMenuShown = ::SendMessage(_pPublicInterface->getHSelf(), NPPM_ISMENUHIDDEN, 0, 0) != TRUE;
+			if (_beforeSpecialView._isMenuShown)
 				::SendMessage(_pPublicInterface->getHSelf(), NPPM_HIDEMENU, 0, TRUE);
 
 			//Hide rebar
@@ -5328,15 +5381,15 @@ void Notepad_plus::postItToggle()
 		// PostIt!
 
 		//Set popup style for fullscreen window and store the old style
-		if (!_beforeSpecialView.isFullScreen)
+		if (!_beforeSpecialView._isFullScreen)
 		{
 			//Hide window so windows can properly update it
 			::ShowWindow(_pPublicInterface->getHSelf(), SW_HIDE);
-			_beforeSpecialView.preStyle = ::SetWindowLongPtr( _pPublicInterface->getHSelf(), GWL_STYLE, WS_POPUP );
-			if (!_beforeSpecialView.preStyle)
+			_beforeSpecialView._preStyle = ::SetWindowLongPtr( _pPublicInterface->getHSelf(), GWL_STYLE, WS_POPUP );
+			if (!_beforeSpecialView._preStyle)
 			{
 				//something went wrong, use default settings
-				_beforeSpecialView.preStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN;
+				_beforeSpecialView._preStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN;
 			}
 			//Redraw the window and refresh windowmanager cache, dont do anything else, sizing is done later on
 			::SetWindowPos(_pPublicInterface->getHSelf(), HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_NOZORDER|SWP_DRAWFRAME|SWP_FRAMECHANGED);
@@ -5365,10 +5418,10 @@ void Notepad_plus::postItToggle()
         _restoreButton.display(false);
 
 		//Setup GUI
-		if (!_beforeSpecialView.isFullScreen)
+		if (!_beforeSpecialView._isFullScreen)
 		{
 			//only change the these parts of GUI if not already done by fullscreen
-			if (_beforeSpecialView.isMenuShown)
+			if (_beforeSpecialView._isMenuShown)
 				::SendMessage(_pPublicInterface->getHSelf(), NPPM_HIDEMENU, 0, FALSE);
 
 			//Show rebar
@@ -5376,19 +5429,19 @@ void Notepad_plus::postItToggle()
 			_rebarBottom.display(true);
 		}
 		//Do this GUI config always
-		if (_beforeSpecialView.isStatusbarShown)
+		if (_beforeSpecialView._isStatusbarShown)
 			::SendMessage(_pPublicInterface->getHSelf(), NPPM_HIDESTATUSBAR, 0, FALSE);
-		if (_beforeSpecialView.isTabbarShown)
+		if (_beforeSpecialView._isTabbarShown)
 			::SendMessage(_pPublicInterface->getHSelf(), NPPM_HIDETABBAR, 0, FALSE);
-		if (!_beforeSpecialView.isAlwaysOnTop)
+		if (!_beforeSpecialView._isAlwaysOnTop)
 			::SendMessage(_pPublicInterface->getHSelf(), WM_COMMAND, IDM_VIEW_ALWAYSONTOP, 0);
 
 		//restore window style if not fullscreen
-		if (!_beforeSpecialView.isFullScreen)
+		if (!_beforeSpecialView._isFullScreen)
 		{
 			//dwStyle |= (WS_CAPTION | WS_SIZEBOX);
 			::ShowWindow(_pPublicInterface->getHSelf(), SW_HIDE);
-			::SetWindowLongPtr(_pPublicInterface->getHSelf(), GWL_STYLE, _beforeSpecialView.preStyle);
+			::SetWindowLongPtr(_pPublicInterface->getHSelf(), GWL_STYLE, _beforeSpecialView._preStyle);
 
 			//Redraw the window and refresh windowmanager cache, dont do anything else, sizing is done later on
 			::SetWindowPos(_pPublicInterface->getHSelf(), HWND_NOTOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_NOZORDER|SWP_DRAWFRAME|SWP_FRAMECHANGED);
@@ -5396,8 +5449,93 @@ void Notepad_plus::postItToggle()
 		}
 	}
 
-	_beforeSpecialView.isPostIt = !_beforeSpecialView.isPostIt;
+	_beforeSpecialView._isPostIt = !_beforeSpecialView._isPostIt;
 	::SendMessage(_pPublicInterface->getHSelf(), WM_SIZE, 0, 0);
+}
+
+// Distraction Free mode uses full screen mode + post-it mode + setting padding on the both left & right sides.
+// In order to keep the coherence of data, when full screen mode or (and) post-it mode is (are) active,
+// Distraction Free mode should be innaccible, and vice versa.
+void Notepad_plus::distractionFreeToggle()
+{
+	// Toggle Distraction Free Mode
+	fullScreenToggle();
+	postItToggle();
+
+	// Get padding info
+	const ScintillaViewParams& svp = NppParameters::getInstance().getSVP();
+	int paddingLeft = 0;
+	int paddingRight = 0;
+	
+
+	// Enable or disable Distraction Free Mode
+	if (_beforeSpecialView._isDistractionFree) // disable it
+	{
+		// restore another view if 2 views mode was on
+		if (_beforeSpecialView._was2ViewModeOn)
+		{
+			showView(otherView());
+			_beforeSpecialView._was2ViewModeOn = false;
+		}
+
+		// restore dockable panels
+		for (auto i : _beforeSpecialView._pVisibleDockingContainers)
+		{
+			i->display();
+		}
+		_dockingManager.resize();
+
+		// restore padding
+		paddingLeft = svp._paddingLeft;
+		paddingRight = svp._paddingRight;
+
+		// hide restore button
+		_restoreButton.setButtonStatus(0);
+		_restoreButton.display(false);
+	}
+	else // enable it
+	{
+		// check if 2 views mode is on
+		ScintillaEditView & nonFocusedView = (otherView() == MAIN_VIEW) ? _mainEditView : _subEditView;
+		if (nonFocusedView.isVisible())
+		{
+			hideView(otherView());
+			_beforeSpecialView._was2ViewModeOn = true;
+		}
+		else
+		{
+			_beforeSpecialView._was2ViewModeOn = false;
+		}
+
+		// check if any dockable panel is visible
+		std::vector<DockingCont*> & container = _dockingManager.getContainerInfo();
+		_beforeSpecialView._pVisibleDockingContainers.clear();
+		for (auto i : container)
+		{
+			if (i->isVisible())
+			{
+				_beforeSpecialView._pVisibleDockingContainers.push_back(i);
+			}
+		}
+		
+		for (auto i : _beforeSpecialView._pVisibleDockingContainers)
+		{
+			i->display(false);
+		}
+		_dockingManager.resize();
+
+		// set padding
+		paddingLeft = paddingRight = svp.getDistractionFreePadding(_pEditView->getWidth());
+
+		// set state of restore button (it's already shown by fullScreen & postIt toggling)
+		_restoreButton.setButtonStatus(buttonStatus_distractionFree);
+	}
+
+	_beforeSpecialView._isDistractionFree = !_beforeSpecialView._isDistractionFree;
+
+	// set Distraction Free Mode paddin or restore the normal padding
+	_pEditView->execute(SCI_SETMARGINLEFT, 0, paddingLeft);
+	_pEditView->execute(SCI_SETMARGINRIGHT, 0, paddingRight);
 }
 
 void Notepad_plus::doSynScorll(HWND whichView)
@@ -6929,6 +7067,9 @@ static const QuoteParams quotes[] =
 	{TEXT("Anonymous #165"), QuoteParams::rapid, false, SC_CP_UTF8, L_TEXT, TEXT("What's the difference between a police officer and a bullet?\nWhen a bullet kills someone else, you know it's been fired.") },
 	{TEXT("Anonymous #166"), QuoteParams::rapid, false, SC_CP_UTF8, L_TEXT, TEXT("What has 4 letters\nsometimes 9 letters\nbut never has 5 letters") },
 	{TEXT("Anonymous #167"), QuoteParams::slow, false, SC_CP_UTF8, L_TEXT, TEXT("The 'h' in \"software development\" stands for \"happiness\".") },
+	{TEXT("Anonymous #168"), QuoteParams::rapid, false, SC_CP_UTF8, L_TEXT, TEXT("Never let your computer know that you are in a hurry.\nComputers can smell fear.\nThey slow down if they know that you are running out of time.") },
+	{TEXT("Anonymous #169"), QuoteParams::slow, false, SC_CP_UTF8, L_TEXT, TEXT("JavaScript is not a language.\nIt's a programming jokes generator.") },
+	{TEXT("Anonymous #170"), QuoteParams::slow, false, SC_CP_UTF8, L_TEXT, TEXT("A journalist asked Linus Torvalds what makes code bad.\nHe replied : No comment.") },
 	{TEXT("A developer"), QuoteParams::slow, false, SC_CP_UTF8, L_TEXT, TEXT("No hugs & kisses.\nOnly bugs & fixes.") },
 	{TEXT("Elon Musk"), QuoteParams::rapid, false, SC_CP_UTF8, L_TEXT, TEXT("Don't set your password as your child's name.\nName your child after your password.") },
 	{TEXT("OOP"), QuoteParams::slow, false, SC_CP_UTF8, L_TEXT, TEXT("If you want to treat women as objects,\ndo it with class.")},

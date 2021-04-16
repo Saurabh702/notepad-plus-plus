@@ -801,6 +801,7 @@ struct NppGUI final
 	bool _tabReplacedBySpace = false;
 
 	bool _finderLinesAreCurrentlyWrapped = false;
+	bool _finderPurgeBeforeEverySearch = false;
 
 	int _fileAutoDetection = cdEnabledNew;
 
@@ -934,6 +935,22 @@ struct ScintillaViewParams
 	bool _disableAdvancedScrolling = false;
 	bool _doSmoothFont = false;
 	bool _showBorderEdge = true;
+
+	unsigned char _paddingLeft = 0;  // 0-9 pixel
+	unsigned char _paddingRight = 0; // 0-9 pixel
+
+	// distractionFreeDivPart is used for divising the fullscreen pixel width.
+	// the result of division will be the left & right padding in Distraction Free mode
+	unsigned char _distractionFreeDivPart = 4;     // 3-9 parts
+
+	int getDistractionFreePadding(int editViewWidth) const {
+		const int defaultDiviser = 4;
+		int diviser = _distractionFreeDivPart > 2 ? _distractionFreeDivPart : defaultDiviser;
+		int paddingLen = editViewWidth / diviser;
+		if (paddingLen <= 0)
+			paddingLen = editViewWidth / defaultDiviser;
+		return paddingLen;
+	};
 };
 
 const int NB_LIST = 20;
@@ -1165,6 +1182,9 @@ struct FindHistory final
 
 	bool _isFifRecuisive = true;
 	bool _isFifInHiddenFolder = false;
+    bool _isFifProjectPanel_1 = false;
+    bool _isFifProjectPanel_2 = false;
+    bool _isFifProjectPanel_3 = false;
 
 	searchMode _searchMode = normal;
 	transparencyMode _transparencyMode = onLossingFocus;
@@ -1331,7 +1351,7 @@ public:
 	bool _isTaskListRBUTTONUP_Active = false;
 	int L_END;
 
-	const NppGUI & getNppGUI() const {
+	NppGUI & getNppGUI() {
 		return _nppGUI;
 	}
 
@@ -1501,6 +1521,9 @@ public:
 	}
 	const CmdLineParamsDTO & getCmdLineParams() const {return _cmdLineParams;};
 
+	const generic_string& getCmdLineString() const { return _cmdLineString; }
+	void setCmdLineString(const generic_string& str) { _cmdLineString = str; }
+
 	void setFileSaveDlgFilterIndex(int ln) {_fileSaveDlgFilterIndex = ln;};
 	int getFileSaveDlgFilterIndex() const {return _fileSaveDlgFilterIndex;};
 
@@ -1575,6 +1598,7 @@ public:
 		generic_string _find;
 		generic_string _replace;
 		generic_string _findInFiles;
+		generic_string _findInProjects;
 		generic_string _mark;
 	};
 
@@ -1668,6 +1692,16 @@ public:
 		_cmdSettingsDir = settingsDir;
 	};
 
+	void setTitleBarAdd(const generic_string& titleAdd)
+	{
+		_titleBarAdditional = titleAdd;
+	}
+
+	const generic_string& getTitleBarAdd() const
+	{
+		return _titleBarAdditional;
+	}
+
 	DPIManager _dpiManager;
 
 	generic_string static getSpecialFolderLocation(int folderKind);
@@ -1727,6 +1761,7 @@ private:
 	int _nbExternalLang = 0;
 
 	CmdLineParamsDTO _cmdLineParams;
+	generic_string _cmdLineString;
 
 	int _fileSaveDlgFilterIndex = -1;
 
@@ -1746,6 +1781,8 @@ private:
 	bool _isx64 = false; // by default 32-bit
 
 	generic_string _cmdSettingsDir;
+
+	generic_string _titleBarAdditional;
 
 public:
 	void setShortcutDirty() { _isAnyShortcutModified = true; };

@@ -3,7 +3,7 @@
 The comments are here for explanation, it's not necessary to translate them.
 -->
 <NotepadPlus>
-    <Native-Langue name="English" filename="english.xml" version="7.9.3">
+    <Native-Langue name="English" filename="english.xml" version="7.9.4">
         <Menu>
             <Main>
                 <!-- Main Menu Entries -->
@@ -37,6 +37,7 @@ The comments are here for explanation, it's not necessary to translate them.
                     <Item subMenuId="edit-pasteSpecial" name="Paste Special"/>
                     <Item subMenuId="edit-onSelection" name="On Selection"/>
                     <Item subMenuId="search-markAll" name="Mark All"/>
+                    <Item subMenuId="search-markOne" name="Mark One"/>
                     <Item subMenuId="search-unmarkAll" name="Unmark All"/>
                     <Item subMenuId="search-jumpUp" name="Jump Up"/>
                     <Item subMenuId="search-jumpDown" name="Jump Down"/>
@@ -76,7 +77,7 @@ The comments are here for explanation, it's not necessary to translate them.
                 <!-- all menu item -->
                 <Commands>
                     <Item id="41001" name="&amp;New"/>
-                    <Item id="41002" name="&amp;Open"/>
+                    <Item id="41002" name="&amp;Open..."/>
                     <Item id="41019" name="Explorer"/>
                     <Item id="41020" name="cmd"/>
                     <Item id="41025" name="Folder as Workspace"/>
@@ -232,6 +233,11 @@ The comments are here for explanation, it's not necessary to translate them.
                     <Item id="43059" name="5th Style"/>
                     <Item id="43060" name="All Styles"/>
                     <Item id="43061" name="Find Style (Marked)"/>
+                    <Item id="43062" name="Using 1st Style"/>
+                    <Item id="43063" name="Using 2nd Style"/>
+                    <Item id="43064" name="Using 3rd Style"/>
+                    <Item id="43065" name="Using 4th Style"/>
+                    <Item id="43066" name="Using 5th Style"/>
                     <Item id="43045" name="Search Results Window"/>
                     <Item id="43046" name="Next Search Result"/>
                     <Item id="43047" name="Previous Search Result"/>
@@ -240,6 +246,7 @@ The comments are here for explanation, it's not necessary to translate them.
                     <Item id="43054" name="Mar&amp;k..."/>
                     <Item id="44009" name="Post-It"/>
                     <Item id="44010" name="Fold All"/>
+                    <Item id="44011" name="Distraction Free Mode"/>
                     <Item id="44019" name="Show All Characters"/>
                     <Item id="44020" name="Show Indent Guide"/>
                     <Item id="44022" name="Word wrap"/>
@@ -283,14 +290,14 @@ The comments are here for explanation, it's not necessary to translate them.
                     <Item id="45003" name="Macintosh (CR)"/>
                     <Item id="45004" name="ANSI"/>
                     <Item id="45005" name="UTF-8-BOM"/>
-                    <Item id="45006" name="UCS-2 BE BOM"/>
-                    <Item id="45007" name="UCS-2 LE BOM"/>
+                    <Item id="45006" name="UTF-16 BE BOM"/>
+                    <Item id="45007" name="UTF-16 LE BOM"/>
                     <Item id="45008" name="UTF-8"/>
                     <Item id="45009" name="Convert to ANSI"/>
                     <Item id="45010" name="Convert to UTF-8"/>
                     <Item id="45011" name="Convert to UTF-8-BOM"/>
-                    <Item id="45012" name="Convert to UCS-2 BE BOM"/>
-                    <Item id="45013" name="Convert to UCS-2 LE BOM"/>
+                    <Item id="45012" name="Convert to UTF-16 BE BOM"/>
+                    <Item id="45013" name="Convert to UTF-16 LE BOM"/>
                     <Item id="45060" name="Big5 (Traditional)"/>
                     <Item id="45061" name="GB2312 (Simplified)"/>
                     <Item id="45054" name="OEM 861: Icelandic"/>
@@ -376,7 +383,7 @@ The comments are here for explanation, it's not necessary to translate them.
         </Menu>
 
         <Dialog>
-            <Find title="" titleFind="Find" titleReplace="Replace" titleFindInFiles="Find in Files" titleMark="Mark">
+            <Find title="" titleFind="Find" titleReplace="Replace" titleFindInFiles="Find in Files" titleFindInProjects="Find in Projects" titleMark="Mark">
                 <Item id="1"    name="Find Next"/>
                 <Item id="1722" name="Backward direction"/>
                 <Item id="2"    name="Close"/>
@@ -407,7 +414,11 @@ The comments are here for explanation, it's not necessary to translate them.
                 <Item id="1625" name="&amp;Normal"/>
                 <Item id="1626" name="E&amp;xtended (\n, \r, \t, \0, \x...)"/>
                 <Item id="1660" name="Replace in Files"/>
+                <Item id="1665" name="Replace in Projects"/>
                 <Item id="1661" name="Follow current doc."/>
+                <Item id="1662" name="Project Panel 1"/>
+                <Item id="1663" name="Project Panel 2"/>
+                <Item id="1664" name="Project Panel 3"/>
                 <Item id="1641" name="Find All in Current Document"/>
                 <Item id="1686" name="Transparenc&amp;y"/>
                 <Item id="1703" name="&amp;. matches newline"/>
@@ -535,11 +546,16 @@ The comments are here for explanation, it's not necessary to translate them.
                     <Item id="45001" name="EOL Conversion to Windows (CR LF)"/>
                     <Item id="45002" name="EOL Conversion to Unix (LF)"/>
                     <Item id="45003" name="EOL Conversion to Macintosh (CR)"/>
-                    <Item id="43022" name="Mark text using 1st style"/>
-                    <Item id="43024" name="Mark text using 2nd style"/>
-                    <Item id="43026" name="Mark text using 3rd style"/>
-                    <Item id="43028" name="Mark text using 4th style"/>
-                    <Item id="43030" name="Mark text using 5th style"/>
+                    <Item id="43022" name="Mark all using 1st style"/>
+                    <Item id="43024" name="Mark all using 2nd style"/>
+                    <Item id="43026" name="Mark all using 3rd style"/>
+                    <Item id="43028" name="Mark all using 4th style"/>
+                    <Item id="43030" name="Mark all using 5th style"/>
+                    <Item id="43062" name="Mark one using 1st style"/>
+                    <Item id="43063" name="Mark one using 2nd style"/>
+                    <Item id="43064" name="Mark one using 3rd style"/>
+                    <Item id="43065" name="Mark one using 4th style"/>
+                    <Item id="43066" name="Mark one using 5th style"/>
                     <Item id="43023" name="Clear marks using 1st style"/>
                     <Item id="43025" name="Clear marks using 2nd style"/>
                     <Item id="43027" name="Clear marks using 3rd style"/>
@@ -849,6 +865,10 @@ The comments are here for explanation, it's not necessary to translate them.
 You can define several column markers by using white space to separate the different numbers."/>
                     <Item id="6231" name="Border Width"/>
                     <Item id="6235" name="No edge"/>
+                    <Item id="6208" name="Padding"/>
+                    <Item id="6209" name="Left"/>
+                    <Item id="6210" name="Right"/>
+                    <Item id="6212" name="Distraction Free"/>
                 </MarginsBorderEdge>
 
                 <NewDoc title="New Document">
@@ -860,8 +880,8 @@ You can define several column markers by using white space to separate the diffe
                     <Item id="6406" name="ANSI"/>
                     <Item id="6407" name="UTF-8"/>
                     <Item id="6408" name="UTF-8 with BOM"/>
-                    <Item id="6409" name="UCS-2 Big Endian with BOM"/>
-                    <Item id="6410" name="UCS-2 Little Endian with BOM"/>
+                    <Item id="6409" name="UTF-16 Big Endian with BOM"/>
+                    <Item id="6410" name="UTF-16 Little Endian with BOM"/>
                     <Item id="6411" name="Default language :"/>
                     <Item id="6419" name="New Document"/>
                     <Item id="6420" name="Apply to opened ANSI files"/>
@@ -1041,7 +1061,6 @@ You can define several column markers by using white space to separate the diffe
                     <Item id="6325" name="Scroll to the last line after update"/>
                     <Item id="6322" name="Session file ext.:"/>
                     <Item id="6323" name="Enable Notepad++ auto-updater"/>
-                    <Item id="6351" name="Set Save dialog file extension filter to *.*"/>
                     <Item id="6324" name="Document Switcher (Ctrl+TAB)"/>
                     <Item id="6331" name="Show only filename in title bar"/>
                     <Item id="6334" name="Autodetect character encoding"/>
@@ -1174,7 +1193,8 @@ Do you want to recover your langs.xml?"/> <!-- HowToReproduce: Close Notepad++. 
 Please remove its root from the panel before you add folder &quot;$STR_REPLACE$&quot;."/> <!-- HowToReproduce: Add a folder like "c:\temp\aFolder\" into "Folder as Workspace" panel, then try to add "c:\temp\". -->
 
             <ProjectPanelChanged title="$STR_REPLACE$" message="The workspace was modified. Do you want to save it?"/>
-            <ProjectPanelChangedSaveError title="$STR_REPLACE$" message="Your workspace has not been saved."/> <!-- HowToReproduce: this message prevents from system failure. It's hard to reproduce. -->
+            <ProjectPanelSaveError title="$STR_REPLACE$" message="An error occurred while writing your workspace file.
+Your workspace has not been saved."/> <!-- HowToReproduce: this message prevents from system failure. It's hard to reproduce. -->
             <ProjectPanelOpenDoSaveDirtyWsOrNot title="Open Workspace" message="The current workspace was modified. Do you want to save the current project?"/>
             <ProjectPanelNewDoSaveDirtyWsOrNot title="New Workspace" message="The current workspace was modified. Do you want to save the current project?"/>
             <ProjectPanelOpenFailed title="Open Workspace" message="The workspace could not be opened.
@@ -1269,6 +1289,7 @@ Continue?"/>
                     <Item id="3126" name="Save As..."/>
                     <Item id="3127" name="Save a Copy As..."/>
                     <Item id="3121" name="Add New Project"/>
+                    <Item id="3128" name="Find in Projects..."/>
                 </WorkspaceMenu>
                 <ProjectMenu>
                     <Item id="3111" name="Rename"/>
@@ -1324,6 +1345,7 @@ Find in all files except exe, obj &amp;&amp; log:
             <find-status-replaceinopenedfiles-nb-replaced value="Replace in Opened Files: $INT_REPLACE$ occurrences were replaced"/>
             <find-status-mark-re-malformed value="Mark: The regular expression to search is malformed"/>
             <find-status-invalid-re value="Find: Invalid regular expression"/>
+            <find-status-search-failed value="Find: Search failed"/>
             <find-status-mark-1-match value="Mark: 1 match"/>
             <find-status-mark-nb-matches value="Mark: $INT_REPLACE$ matches"/>
             <find-status-count-re-malformed value="Count: The regular expression to search is malformed"/>
@@ -1353,6 +1375,7 @@ Find in all files except exe, obj &amp;&amp; log:
             <finder-select-all value="Select all"/>
             <finder-clear-all value="Clear all"/>
             <finder-open-all value="Open all"/>
+            <finder-purge-for-every-search value="Purge for every search"/>
             <finder-wrap-long-lines value="Word wrap long lines"/>
             <common-ok value="OK"/>
             <common-cancel value="Cancel"/>
@@ -1384,6 +1407,8 @@ Find in all files except exe, obj &amp;&amp; log:
             <replace-in-files-confirm-directory value="Are you sure you want to replace all occurrences in :"/>
             <replace-in-files-confirm-filetype value="For file type :"/>
             <replace-in-files-progress-title value="Replace In Files progress..."/>
+            <replace-in-projects-confirm-title value="Are you sure?"/>
+            <replace-in-projects-confirm-message value="Do you want to replace all occurrences in all documents in the selected Project Panel(s)?"/>
             <replace-in-open-docs-confirm-title value="Are you sure?"/>
             <replace-in-open-docs-confirm-message value="Are you sure you want to replace all occurrences in all open documents?"/>
             <find-result-caption value="Search results"/>
@@ -1395,6 +1420,8 @@ Find in all files except exe, obj &amp;&amp; log:
             <find-result-line-prefix value="Line"/> <!-- Must not begin with space or tab character -->
             <find-regex-zero-length-match value="zero length match" />
             <session-save-folder-as-workspace value="Save Folder as Workspace" />
+            <tab-untitled-string value="new " />
+            <file-save-assign-type value="&amp;Append extension" />
         </MiscStrings>
     </Native-Langue>
 </NotepadPlus>

@@ -217,6 +217,11 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			return findInFiles();
 		}
 
+		case WM_FINDINPROJECTS:
+		{
+			return findInProjects();
+		}
+
 		case WM_FINDALL_INCURRENTFINDER:
 		{
 			FindersInfo *findInFolderInfo = reinterpret_cast<FindersInfo *>(wParam);
@@ -230,6 +235,12 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 		case WM_REPLACEINFILES:
 		{
 			replaceInFiles();
+			return TRUE;
+		}
+
+		case WM_REPLACEINPROJECTS:
+		{
+			replaceInProjects();
 			return TRUE;
 		}
 
@@ -254,6 +265,23 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			_findReplaceDlg.launchFindInFilesDlg();
 			setFindReplaceFolderFilter(reinterpret_cast<const TCHAR*>(wParam), reinterpret_cast<const TCHAR*>(lParam));
 
+			return TRUE;
+		}
+
+		case NPPM_INTERNAL_FINDINPROJECTS:
+		{
+			const int strSize = FINDREPLACE_MAXLENGTH;
+			TCHAR str[strSize];
+
+			bool isFirstTime = not _findReplaceDlg.isCreated();
+			_findReplaceDlg.doDialog(FIND_DLG, _nativeLangSpeaker.isRTL());
+
+			_pEditView->getGenericSelectedText(str, strSize);
+			_findReplaceDlg.setSearchText(str);
+			if (isFirstTime)
+				_nativeLangSpeaker.changeDlgLang(_findReplaceDlg.getHSelf(), "Find");
+			_findReplaceDlg.launchFindInProjectsDlg();
+			_findReplaceDlg.setProjectCheckmarks(NULL, (int) wParam);
 			return TRUE;
 		}
 
@@ -485,7 +513,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 		case NPPM_DISABLEAUTOUPDATE:
 		{
-			NppGUI & nppGUI = const_cast<NppGUI &>(nppParam.getNppGUI());
+			NppGUI & nppGUI = nppParam.getNppGUI();
 			nppGUI._autoUpdateOpt._doAutoUpdate = false;
 			return TRUE;
 		}
@@ -1624,7 +1652,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 
 		case NPPM_INTERNAL_ENABLECHECKDOCOPT:
 		{
-			NppGUI& nppgui = const_cast<NppGUI&>((nppParam.getNppGUI()));
+			NppGUI& nppgui = nppParam.getNppGUI();
 			if (wParam == CHECKDOCOPT_NONE)
 				nppgui._fileAutoDetection = cdDisabled;
 			else if (wParam == CHECKDOCOPT_UPDATESILENTLY)
@@ -1803,9 +1831,9 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 					return FALSE;
 				}
 
-				if (_beforeSpecialView.isFullScreen)	//closing, return to windowed mode
+				if (_beforeSpecialView._isFullScreen)	//closing, return to windowed mode
 					fullScreenToggle();
-				if (_beforeSpecialView.isPostIt)		//closing, return to windowed mode
+				if (_beforeSpecialView._isPostIt)		//closing, return to windowed mode
 					postItToggle();
 
 				if (_configStyleDlg.isCreated() && ::IsWindowVisible(_configStyleDlg.getHSelf()))
@@ -2160,7 +2188,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			DocTabView::setHideTabBarStatus(hide);
 			::SendMessage(hwnd, WM_SIZE, 0, 0);
 
-			NppGUI & nppGUI = const_cast<NppGUI &>(((NppParameters::getInstance()).getNppGUI()));
+			NppGUI & nppGUI = (NppParameters::getInstance()).getNppGUI();
 			if (hide)
 				nppGUI._tabStatus |= TAB_HIDE;
 			else
@@ -2195,7 +2223,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			if (hide == isHidden)
 				return isHidden;
 
-			NppGUI & nppGUI = const_cast<NppGUI &>(nppParam.getNppGUI());
+			NppGUI & nppGUI = nppParam.getNppGUI();
 			nppGUI._menuBarShow = !hide;
 			if (nppGUI._menuBarShow)
 				::SetMenu(hwnd, _mainMenuHandle);
@@ -2213,7 +2241,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 		case NPPM_HIDESTATUSBAR:
 		{
 			bool show = (lParam != TRUE);
-			NppGUI & nppGUI = const_cast<NppGUI &>(nppParam.getNppGUI());
+			NppGUI & nppGUI = nppParam.getNppGUI();
 			bool oldVal = nppGUI._statusBarShow;
 			if (show == oldVal)
 				return oldVal;
@@ -2291,7 +2319,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 		case NPPM_INTERNAL_DISABLEAUTOUPDATE:
 		{
 			//printStr(TEXT("you've got me"));
-			NppGUI & nppGUI = const_cast<NppGUI &>(nppParam.getNppGUI());
+			NppGUI & nppGUI = nppParam.getNppGUI();
 			nppGUI._autoUpdateOpt._doAutoUpdate = false;
 			return TRUE;
 		}
@@ -2315,7 +2343,7 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 		case NPPM_DOCSWITCHERDISABLECOLUMN:
 		{
 			BOOL isOff = static_cast<BOOL>(lParam);
-			NppGUI & nppGUI = const_cast<NppGUI &>(nppParam.getNppGUI());
+			NppGUI & nppGUI = nppParam.getNppGUI();
 			nppGUI._fileSwitcherWithoutExtColumn = isOff == TRUE;
 
 			if (_pFileSwitcherPanel)
@@ -2512,6 +2540,25 @@ LRESULT Notepad_plus::process(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPa
 			{
 				addHotSpot(pView);
 			}
+		}
+
+		case NPPM_INTERNAL_UPDATETEXTZONEPADDING:
+		{
+			ScintillaViewParams &svp = const_cast<ScintillaViewParams &>(nppParam.getSVP());
+			if (_beforeSpecialView._isDistractionFree)
+			{
+				int paddingLen = svp.getDistractionFreePadding(_pEditView->getWidth());
+				_pEditView->execute(SCI_SETMARGINLEFT, 0, paddingLen);
+				_pEditView->execute(SCI_SETMARGINRIGHT, 0, paddingLen);
+			}
+			else
+			{
+				_mainEditView.execute(SCI_SETMARGINLEFT, 0, svp._paddingLeft);
+				_mainEditView.execute(SCI_SETMARGINRIGHT, 0, svp._paddingRight);
+				_subEditView.execute(SCI_SETMARGINLEFT, 0, svp._paddingLeft);
+				_subEditView.execute(SCI_SETMARGINRIGHT, 0, svp._paddingRight);
+			}
+			return TRUE;
 		}
 
 		default:

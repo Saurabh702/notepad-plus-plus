@@ -56,20 +56,21 @@ MenuPosition menuPos[] = {
 	{ 1, 19, -1, "edit-onSelection" },
 
 	{ 2, 18, -1, "search-markAll" },
-	{ 2, 19, -1, "search-unmarkAll" },
-	{ 2, 20, -1, "search-jumpUp" },
-	{ 2, 21, -1, "search-jumpDown" },
-	{ 2, 22, -1, "search-copyStyledText" },
-	{ 2, 24, -1, "search-bookmark" },
+	{ 2, 19, -1, "search-markOne" },
+	{ 2, 20, -1, "search-unmarkAll" },
+	{ 2, 21, -1, "search-jumpUp" },
+	{ 2, 22, -1, "search-jumpDown" },
+	{ 2, 23, -1, "search-copyStyledText" },
+	{ 2, 25, -1, "search-bookmark" },
 
-	{ 3,  4, -1, "view-currentFileIn" },
-	{ 3,  6, -1, "view-showSymbol" },
-	{ 3,  7, -1, "view-zoom" },
-	{ 3,  8, -1, "view-moveCloneDocument" },
-	{ 3,  9, -1, "view-tab" },
-	{ 3, 18, -1, "view-collapseLevel" },
-	{ 3, 19, -1, "view-uncollapseLevel" },
-	{ 3, 23, -1, "view-project" },
+	{ 3,  5, -1, "view-currentFileIn" },
+	{ 3,  7, -1, "view-showSymbol" },
+	{ 3,  8, -1, "view-zoom" },
+	{ 3,  9, -1, "view-moveCloneDocument" },
+	{ 3, 10, -1, "view-tab" },
+	{ 3, 19, -1, "view-collapseLevel" },
+	{ 3, 20, -1, "view-uncollapseLevel" },
+	{ 3, 24, -1, "view-project" },
 
 	{ 4,  5, -1, "encoding-characterSets" },
 	{ 4,  5,  0, "encoding-arabic" },
@@ -751,7 +752,8 @@ void NativeLangSpeaker::changeFindReplaceDlgLang(FindReplaceDlg & findReplaceDlg
 				const char *titre1 = (dlgNode->ToElement())->Attribute("titleFind");
 				const char *titre2 = (dlgNode->ToElement())->Attribute("titleReplace");
 				const char *titre3 = (dlgNode->ToElement())->Attribute("titleFindInFiles");
-				const char *titre4 = (dlgNode->ToElement())->Attribute("titleMark");
+				const char *titre4 = (dlgNode->ToElement())->Attribute("titleFindInProjects");
+				const char *titre5 = (dlgNode->ToElement())->Attribute("titleMark");
 
 				WcharMbcsConvertor& wmc = WcharMbcsConvertor::getInstance();
 
@@ -776,6 +778,12 @@ void NativeLangSpeaker::changeFindReplaceDlgLang(FindReplaceDlg & findReplaceDlg
 				if (titre4 && titre4[0])
 				{
 					basic_string<wchar_t> nameW = wmc.char2wchar(titre4, _nativeLangEncoding);
+					nppParam.getFindDlgTabTitiles()._findInProjects = nameW;
+					findReplaceDlg.changeTabName(FINDINPROJECTS_DLG, nppParam.getFindDlgTabTitiles()._findInProjects.c_str());
+				}
+				if (titre5 && titre5[0])
+				{
+					basic_string<wchar_t> nameW = wmc.char2wchar(titre5, _nativeLangEncoding);
 					nppParam.getFindDlgTabTitiles()._mark = nameW;
 					findReplaceDlg.changeTabName(MARK_DLG, nppParam.getFindDlgTabTitiles()._mark.c_str());
 				}
